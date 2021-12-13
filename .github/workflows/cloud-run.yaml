@@ -24,7 +24,7 @@ on:
 # Variáveis de ambiente
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-  SERVICE: ml-api
+  SERVICE: detection-sexist-statements
   REGION: us-central1
   BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
   BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
