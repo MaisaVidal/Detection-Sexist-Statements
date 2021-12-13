@@ -36,7 +36,7 @@ def detect():
 @app.route("/")
 def home():
     print("Executou a rota padrão")
-    return "API de detecção de frases sexistas"
+    return "API de detecção de frases sexistas!"
 
 # Subir a API
 if __name__ == '__main__':
