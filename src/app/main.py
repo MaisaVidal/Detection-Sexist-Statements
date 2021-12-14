@@ -16,7 +16,7 @@ app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('BASIC_AUTH_PASSWORD')
 basic_auth = BasicAuth(app)
 
 # Carregar modelo
-with open('models/model_naive_bayes.pkl', 'rb') as f:
+with open('../../models/model_naive_bayes.pkl', 'rb') as f:
     model = pickle.load(f)
 
 
@@ -25,13 +25,23 @@ def detect():
     # Pegar o JSON da requisição
     dados = request.get_json()
     payload = dados['frase']
+    
     print("A frase recebida foi: "+payload)
     # Fazer predição
     pred = model.predict([payload])
+    pred_pob = model.predict_proba([payload])[:,1]
+    
+    print("predict_proba:",pred_pob)
     if pred == 1:
-      return "A Frase '"+payload+ "' é sexista"
-    else:  
-      return "A Frase '"+payload+ "' é neutra/ambígua"
+      is_sexist = 'sexista'
+
+    else:
+      is_sexist = 'neutra/ambígua'
+      
+    res = jsonify(frase=payload, predict=is_sexist, proba=pred_pob[0])
+    print("Predição\n",res.data)
+
+    return res
 
 @app.route("/")
 def home():
