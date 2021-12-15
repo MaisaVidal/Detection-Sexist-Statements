@@ -7,6 +7,9 @@ import string
 import pickle
 import os
 
+from datetime import datetime
+from pubsub import publish_new_detect_sexism
+
 # Criação de uma app
 app = Flask(__name__)
 app.config['BASIC_AUTH_USERNAME'] = os.environ.get('BASIC_AUTH_USERNAME')
@@ -37,6 +40,10 @@ def detect():
 
     else:
       is_sexist = 'neutra/ambígua'
+    
+    request_date = datetime.today().strftime(format="%Y-%m-%d %H:%M:%S")
+    publish_new_detect_sexism('{"request_datetime":"{}", "frase":"{}", \
+            "predict":"{}", "proba":{}}'.format(request_date, payload, is_sexist, pred_pob))  
       
     res = jsonify(frase=payload, predict=is_sexist, proba=pred_pob[0])
     print("Predição\n",res.data)
