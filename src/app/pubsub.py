@@ -4,7 +4,7 @@ import os
 
 def publish_new_detect_sexism(msg):
     project_id = os.environ.get('GCP_PROJECT')
-    topic_id = "topic-new-score-created"
+    topic_id = "topic-new-detect-sexism-created"
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project_id, topic_id)
     data = msg.encode('utf-8')
