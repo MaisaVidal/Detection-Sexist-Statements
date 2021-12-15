@@ -19,7 +19,7 @@ app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('BASIC_AUTH_PASSWORD')
 basic_auth = BasicAuth(app)
 
 # Carregar modelo
-with open('../../models/model_naive_bayes.pkl', 'rb') as f:
+with open('models/model_naive_bayes.pkl', 'rb') as f:
     model = pickle.load(f)
 
 
