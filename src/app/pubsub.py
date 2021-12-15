@@ -15,7 +15,8 @@ def publish_new_detect_sexism(msg):
     return future
     
 if __name__ == '__main__':
-    publish_new_detect_sexism('{\
-        "request_datetime":"2021-01-01",\
-            "score":750, "status":"APROVADO"}')    
+    publish_new_detect_sexism('{ \
+        "request_datetime":"2021-01-01", \
+            "frase":"Why are you getting so emotional?", \
+            "predict":"sexista", "proba":0.6789, }')    
     
