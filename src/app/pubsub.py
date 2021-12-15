@@ -16,10 +16,9 @@ def publish_new_detect_sexism(msg):
     
 if __name__ == '__main__':
     try:
-        publish_new_detect_sexism('{ \
-            "request_datetime":"2021-01-01", \
+        publish_new_detect_sexism('{"request_datetime":"2021-01-01", \
                 "frase":"Why are you getting so emotional?", \
-                "predict":"sexista", "proba":0.6789, }')    
+                "predict":"sexista", "proba":0.6789}')    
     except Exception as e:
         print("pubsub error:", e)
     
