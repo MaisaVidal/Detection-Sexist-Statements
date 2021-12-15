@@ -19,36 +19,41 @@ app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('BASIC_AUTH_PASSWORD')
 basic_auth = BasicAuth(app)
 
 # Carregar modelo
-with open('models/model_naive_bayes.pkl', 'rb') as f:
+with open('../../models/model_naive_bayes.pkl', 'rb') as f:
     model = pickle.load(f)
 
 
 @app.route("/detect", methods=['POST'])
 def detect():
     # Pegar o JSON da requisição
-    dados = request.get_json()
-    payload = dados['frase']
-    
-    print("A frase recebida foi: "+payload)
-    # Fazer predição
-    pred = model.predict([payload])
-    pred_pob = model.predict_proba([payload])[:,1]
-    
-    print("predict_proba:",pred_pob)
-    if pred == 1:
-      is_sexist = 'sexista'
-
-    else:
-      is_sexist = 'neutra/ambígua'
-    
-    request_date = datetime.today().strftime(format="%Y-%m-%d %H:%M:%S")
-    publish_new_detect_sexism('{"request_datetime":"{}", "frase":"{}", \
-            "predict":"{}", "proba":{}}'.format(request_date, payload, is_sexist, pred_pob))  
+    try:
+      dados = request.get_json()
+      payload = dados['frase']
       
-    res = jsonify(frase=payload, predict=is_sexist, proba=pred_pob[0])
-    print("Predição\n",res.data)
+      print("A frase recebida foi: "+payload)
+      # Fazer predição
+      pred = model.predict([payload])
+      pred_pob = model.predict_proba([payload])[:,1]
+      
+      print("predict_proba:",pred_pob)
+      if pred == 1:
+        is_sexist = 'sexista'
 
-    return res
+      else:
+        is_sexist = 'neutra/ambígua'
+      
+      request_date = datetime.today().strftime(format="%Y-%m-%d %H:%M:%S")
+      
+      print('{"request_datetime":"%s", "frase":"%s", "predict":"%s", "proba":%.4f}'% (request_date, payload, is_sexist, pred_pob[0]))
+      publish_new_detect_sexism('{"request_datetime":"%s", "frase":"%s", "predict":"%s", "proba":%.4f}'% (request_date, payload, is_sexist, pred_pob[0]))
+      
+        
+      res = jsonify(frase=payload, predict=is_sexist, proba=pred_pob[0])
+      print("Predição\n",res.data)
+
+      return res
+    except Exception as e:
+      print("Request /detect fail:", e)
 
 @app.route("/")
 def home():
